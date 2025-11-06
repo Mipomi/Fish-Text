@@ -1,20 +1,21 @@
-// --- Data Permainan (Ikan & Joran) ---
-
 const fishData = [
     { name: "Ikan Mas", level: 1, rankName: "Common", minWeight: 0.1, maxWeight: 0.5, chance: 40, basePrice: 10 }, 
-    { name: "Ikan Nila", level: 1, rankName: "Common", minWeight: 0.2, maxWeight: 0.6, chance: 30, basePrice: 12 },
+    { name: "Ikan Nila", level: 1, rankName: "Common", minWeight: 0.2, maxWeight: 0.6, chance: 30, basePrice: 19 },,
+    { name: "Ikan Sapu-sapu", level: 1, rankName: "Common", minWeight: 0.2, maxWeight: 0.8, chance: 50, basePrice: 10 },
+    { name: "Ikan Teri", level: 1, rankName: "Common", minWeight: 0.1, maxWeight: 0.6, chance: 45, basePrice: 9 },
     { name: "Ikan Lele", level: 2, rankName: "Rare", minWeight: 0.5, maxWeight: 1.5, chance: 20, basePrice: 30 },
     { name: "Belut Listrik", level: 2, rankName: "Rare", minWeight: 0.8, maxWeight: 2.0, chance: 7, basePrice: 45 },
-    { name: "Arapaima Raksasa", level: 3, rankName: "Legendary", minWeight: 5.0, maxWeight: 20.0, chance: 3, basePrice: 150 }
+    { name: "Arapaima Raksasa", level: 3, rankName: "Legendary", minWeight: 5.0, maxWeight: 20.0, chance: 3, basePrice: 150 },
+    { name: "Arwana", level: 3, rankName: "Legendary", minWeight: 9.0, maxWeight: 67.0, chance: 2.8, basePrice: 580 },
+    { name: "Gurita", level: 3, rankName: "Legendary", minWeight: 14.0, maxWeight: 89.0, chance: 2.5, basePrice: 698 }
 ];
 
 const rodData = [
-    { id: 0, name: "Joran Tua", colorClass: "rod-1", price: 0, commonBonus: 0, rareBonus: 0, legendaryBonus: 0, baseCatchChance: 50 }, 
-    { id: 1, name: "Joran Bagus", colorClass: "rod-2", price: 500, commonBonus: 5, rareBonus: 5, legendaryBonus: 0, baseCatchChance: 60 },
-    { id: 2, name: "Joran Super", colorClass: "rod-3", price: 1500, commonBonus: 10, rareBonus: 10, legendaryBonus: 5, baseCatchChance: 75 }
+    { id: 0, name: "Joran Lidi", colorClass: "rod-1", price: 0, commonBonus: 0, rareBonus: 0, legendaryBonus: 0, baseCatchChance: 50 }, 
+    { id: 1, name: "Joran Kayu", colorClass: "rod-2", price: 500, commonBonus: 5, rareBonus: 5, legendaryBonus: 0, baseCatchChance: 60 },
+    { id: 2, name: "Joran Bambu", colorClass: "rod-3", price: 1500, commonBonus: 10, rareBonus: 10, legendaryBonus: 5, baseCatchChance: 75 }
 ];
 
-// --- Status Permainan & Variabel Global ---
 let isCasting = false;
 let catchTimer = null;
 let totalCatch = 0; 
@@ -24,7 +25,6 @@ let ownedRods = [rodData[0]];
 let equippedRodId = 0; 
 let currentUsername = null; 
 
-// --- Elemen DOM ---
 const loginView = document.getElementById('loginView');
 const gameView = document.getElementById('gameView');
 const usernameInput = document.getElementById('usernameInput');
@@ -48,16 +48,11 @@ const toggleShopButton = document.getElementById('toggleShopButton');
 const shopContainer = document.getElementById('shopContainer');
 const shopList = document.getElementById('shopList');
 
-// --- PETA WARNA RANK ---
 const rankColorMap = {
     1: '#495057', 
     2: '#28a745', 
     3: '#ffc107'  
 };
-
-// =========================================================================
-// === FUNGSI UTILITAS & RNG ===
-// =========================================================================
 
 function getRandomFloat(min, max) {
     return (Math.random() * (max - min) + min);
@@ -95,32 +90,24 @@ function selectRandomFish(equippedRod) {
     return null;
 }
 
-// =========================================================================
-// === LOGIKA AUTENTIKASI DAN PENYIMPANAN BARU (LOCAL STORAGE) ===
-// =========================================================================
-
 const DEFAULT_GAME_STATE = {
     money: 0,
     inventory: [],
-    // Simpan hanya ID Joran Tua
     ownedRods: [rodData[0].id], 
     equippedRodId: 0,
     totalCatch: 0
 };
 
-// Fungsi untuk mendapatkan kunci Local Storage khusus pemain
 function getPlayerStorageKey(username) {
     return `fishingApp_${username}`;
 }
 
-// Menyimpan status game pemain yang sedang aktif
 function savePlayerGame() {
     if (!currentUsername) return;
     
     const playerData = {
         money: playerMoney,
         inventory: inventory,
-        // Simpan hanya ID joran yang dimiliki
         ownedRods: ownedRods.map(r => r.id),
         equippedRodId: equippedRodId,
         totalCatch: totalCatch
@@ -129,7 +116,6 @@ function savePlayerGame() {
     localStorage.setItem(getPlayerStorageKey(currentUsername), JSON.stringify(playerData));
 }
 
-// Memuat status game pemain aktif
 function loadPlayerGame(username) {
     const savedData = localStorage.getItem(getPlayerStorageKey(username));
     
@@ -144,7 +130,6 @@ function loadPlayerGame(username) {
     }
 
     if (accountData) {
-        // Muat data yang ada
         playerMoney = accountData.money || DEFAULT_GAME_STATE.money;
         inventory = accountData.inventory || DEFAULT_GAME_STATE.inventory;
         totalCatch = accountData.totalCatch || DEFAULT_GAME_STATE.totalCatch;
@@ -158,7 +143,6 @@ function loadPlayerGame(username) {
             isFavorite: fish.isFavorite === true
         }));
     } else {
-        // Akun baru atau data corrupt, gunakan status default
         playerMoney = DEFAULT_GAME_STATE.money;
         inventory = DEFAULT_GAME_STATE.inventory;
         totalCatch = DEFAULT_GAME_STATE.totalCatch;
@@ -166,7 +150,6 @@ function loadPlayerGame(username) {
         ownedRods = [rodData[0]];
     }
     
-    // Perbarui UI
     playerMoneyElement.textContent = playerMoney;
     updateEquippedRodDisplay();
     welcomeMessage.textContent = `Selamat datang, ${username}!`;
@@ -181,22 +164,17 @@ function loginUser() {
     
     currentUsername = username;
     
-    // Cek apakah data pemain sudah ada di Local Storage
     const isNewUser = !localStorage.getItem(getPlayerStorageKey(username));
     
     if (isNewUser) {
-        // Simpan status default untuk akun baru (opsional, loadPlayerGame sudah menangani ini)
-        // Kita hanya perlu memastikan loadPlayerGame dipanggil
         loginMessage.textContent = `Akun ${username} berhasil dibuat!`;
     } else {
         loginMessage.textContent = `Selamat datang kembali, ${username}!`;
     }
 
-    // Simpan status login sesi
     localStorage.setItem('currentUser', username);
     localStorage.setItem('loginTimestamp', Date.now());
 
-    // Muat data (atau buat data baru jika tidak ada) dan masuk ke game
     loadPlayerGame(username);
     loginView.classList.add('hidden');
     gameView.classList.remove('hidden');
@@ -215,14 +193,13 @@ function checkLoginStatus() {
     } else {
         loginView.classList.remove('hidden');
         gameView.classList.add('hidden');
-        // Bersihkan token login lama
         localStorage.removeItem('currentUser');
         localStorage.removeItem('loginTimestamp');
     }
 }
 
 function logoutUser() {
-    savePlayerGame(); // Pastikan menyimpan data terakhir
+    savePlayerGame(); 
     currentUsername = null;
     localStorage.removeItem('currentUser');
     localStorage.removeItem('loginTimestamp');
@@ -234,10 +211,6 @@ function logoutUser() {
     loginMessage.textContent = '';
 }
 
-// =========================================================================
-// === FUNGSI UTAMA GAME (Memastikan pemanggilan savePlayerGame) ===
-// =========================================================================
-
 function updateEquippedRodDisplay() {
     const equippedRod = rodData.find(r => r.id === equippedRodId);
     equippedRodNameElement.textContent = equippedRod ? equippedRod.name : "Joran Tua";
@@ -245,7 +218,6 @@ function updateEquippedRodDisplay() {
 }
 
 function renderShop() {
-    // ... (Logika renderShop tetap sama)
     shopList.innerHTML = '';
     const isOwned = (rodId) => ownedRods.some(rod => rod.id === rodId);
 
@@ -285,10 +257,7 @@ function renderShop() {
 }
 
 function renderInventory() {
-    // ... (Logika renderInventory tetap sama)
     inventoryList.innerHTML = '';
-    
-    // Render Joran Dimiliki
     inventoryList.innerHTML += '<h3>Joran Dimiliki</h3>';
     
     ownedRods.forEach(rod => {
@@ -304,8 +273,7 @@ function renderInventory() {
             </div>
         `;
     });
-    
-    // Render Ikan Tangkapan
+
     inventoryList.innerHTML += '<h3>Ikan Tangkapan</h3>';
 
     if (inventory.length === 0) {
@@ -423,7 +391,7 @@ function buyRod(rodId) {
         savePlayerGame();
         renderShop();
     } else {
-        // Uang tidak cukup
+        alert("Mancing yg bener biar banyak duit");
     }
 }
 
@@ -435,8 +403,6 @@ function equipRod(rodId) {
     updateEquippedRodDisplay();
     renderInventory(); 
 }
-
-// --- Logika Pancing ---
 
 function castFishingRod() {
     if (isCasting) return;
@@ -514,8 +480,6 @@ function handleFishingAction() {
     }
 }
 
-// --- Event Listener & Inisialisasi ---
-
 loginButton.addEventListener('click', loginUser);
 logoutButton.addEventListener('click', logoutUser); 
 
@@ -570,3 +534,4 @@ document.addEventListener('click', (e) => {
 });
 
 checkLoginStatus();
+
