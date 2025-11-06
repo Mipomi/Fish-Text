@@ -20,7 +20,7 @@
 
 ## ⚙️ Cara Bermain
 
-1.  **Akses:** Buka file `index.html` di browser Anda.
+1.  **Akses:** Klik <a href="https://mipomi.github.io/Fish-Text/">di sini</a> untuk memulai permainan.
 2.  **Login:** Masukkan *username* unik Anda untuk masuk atau membuat akun baru.
 3.  **Memancing:** Klik tombol **"Pancing 🎣"** dan tunggu hingga status berubah menjadi "Ada gigitan!".
 4.  **Menangkap:** Ketika ada gigitan, klik tombol (yang sekarang berbunyi **"Angkat Pancing ⬆️"**) secepat mungkin! Keberhasilan bergantung pada peluang dasar joran Anda.
