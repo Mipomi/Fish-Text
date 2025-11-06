@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Memancing Teks</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .hidden { display: none; }
+        .menu-panel { border: 1px solid #ccc; padding: 15px; margin-top: 10px; border-radius: 5px; }
+        .login-container { max-width: 400px; margin: 50px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; text-align: center; }
+        .login-container input, .login-container button { width: 90%; padding: 10px; margin: 5px 0; border-radius: 4px; border: 1px solid #ccc; }
+        .login-container button { background-color: #28a745; color: white; cursor: pointer; }
+    </style>
+</head>
+<body>
+    
+    <div id="loginView" class="login-container">
+        <h2>Selamat Datang</h2>
+        <input type="text" id="usernameInput" placeholder="Masukkan Username Anda" required>
+        <p id="loginMessage" style="color: red;"></p>
+        <button id="loginButton">Masuk / Daftar</button>
+    </div>
+
+    <div class="container hidden" id="gameView">
+        <h1 id="welcomeMessage">Fish Text</h1>
+        
+        <div class="status">
+            <p> Uang: <span id="playerMoney">0</span></p>
+            <p>Status: <span id="gameStatus">Siap memancing.</span></p>
+            <button id="logoutButton" style="background: red; color: white; border: none; padding: 5px 10px; border-radius: 5px;">Keluar</button>
+        </div>
+
+        <div class="controls">
+            <button id="castButton">Pancing </button>
+        </div>
+        
+        <p class="current-rod-status">Joran Di-Equip: <span id="equippedRodName">Joran Tua</span></p>
+
+        <div class="menu-buttons">
+            <button id="toggleInventoryButton">Inventori</button>
+            <button id="toggleShopButton">Toko</button>
+        </div>
+        
+        <div id="inventoryContainer" class="hidden menu-panel">
+            <h2>Inventori Ikan & Joran</h2>
+            <button id="sellAllButton" class="buy-button" style="width: 100%; margin-bottom: 10px;">
+                Jual Semua Ikan (Kecuali Favorit)
+            </button>
+            <div id="inventoryList"></div>
+            <p id="inventorySummary">Total tangkapan: 0 ikan.</p>
+        </div>
+        
+        <div id="shopContainer" class="hidden menu-panel">
+            <h2>Toko Pancingan</h2>
+            <p>Pilih joran untuk dibeli. Hanya bisa dibeli sekali.</p>
+            <div id="shopList"></div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
